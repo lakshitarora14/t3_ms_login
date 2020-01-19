@@ -7,11 +7,12 @@ import lombok.Setter;
 @Setter
 public class LoginDto {
 
-
+//    private String uId;
     private String  email;
     private String password;
     private String cartId;
     private boolean customerOrMerchant;
+
 
 
 

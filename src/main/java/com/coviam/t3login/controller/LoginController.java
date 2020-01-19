@@ -8,11 +8,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
+@RestController
+//@RequestMapping("/book")
 public class LoginController {
 
     @Autowired
@@ -26,18 +27,18 @@ public class LoginController {
     @PostMapping(value = "/signup")
     public ResponseEntity<String> signup(@RequestBody SignupDto signupDto) {
 
-        if (loginService.findEmail(signupDto.getEmail()) != null) {
-            return null;
-        }
-
-        else {
+//        if (loginService.findEmail(signupDto.getEmail()) != null) {
+//            return null;
+//        }
+//
+//        else {
             signupDto.setPassword(pass(signupDto.getPassword()));
             Login login = new Login();
             BeanUtils.copyProperties(signupDto, login);
             Login userCreated = loginService.save(login);
 
             return new ResponseEntity<String>(userCreated.getUId(), HttpStatus.CREATED);
-        }
+//        }
     }
 
     @PostMapping(value = "/login")
@@ -52,11 +53,18 @@ public class LoginController {
             String email = loginDto.getEmail();
             String newPass = pass(loginDto.getPassword());
             String fetchPass = loginService.findPass(email);
+            System.out.println(newPass);
+            System.out.println(fetchPass);
             if(newPass.equals(fetchPass))
                 return new ResponseEntity<String>(HttpStatus.OK);
             return null;
 
 
         }
+    }
+
+    @PostMapping
+    public String testMethod(){
+        return "Working";
     }
 }

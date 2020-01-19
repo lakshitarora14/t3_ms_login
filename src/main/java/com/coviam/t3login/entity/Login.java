@@ -1,20 +1,21 @@
 package com.coviam.t3login.entity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Entity
-@Table(name = "LOGIN")
 @Getter
 @Setter
+@Entity
+@Table(name = "LOGIN")
 public class Login {
 
-
-
+    @GeneratedValue(generator = "uid")
+    @GenericGenerator(
+            name = "uid",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     @Id
     @Column(name = "uid")
     private String uId;
@@ -22,6 +23,5 @@ public class Login {
     private String passwordHash;
     private boolean customerOrMerchant;
     private String cartId;
-
 
 }
