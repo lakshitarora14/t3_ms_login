@@ -20,8 +20,7 @@ public class LoginController {
 
     private static String pass(String password){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
-        return hashedPassword;
+        return passwordEncoder.encode(password);
     }
 
     @PostMapping(value = "/signup")
@@ -35,24 +34,29 @@ public class LoginController {
             signupDto.setPassword(pass(signupDto.getPassword()));
             Login login = new Login();
             BeanUtils.copyProperties(signupDto, login);
-            Login employeeCreated = loginService.save(login);
+            Login userCreated = loginService.save(login);
 
-            return new ResponseEntity<String>(employeeCreated.getUId(), HttpStatus.CREATED);
+            return new ResponseEntity<String>(userCreated.getUId(), HttpStatus.CREATED);
         }
     }
 
-//    @PostMapping(value = "/login")
-//    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-//
-//        if (loginService.findEmail(loginDto.getEmail()) == null) {
-//            return null;
-//        }
-//
-//        else {
-//            Login login = new Login();
-//            loginDto.getPassword();
-//
-//
-//        }
-//    }
+    @PostMapping(value = "/login")
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+
+        if (loginService.findEmail(loginDto.getEmail()) == null) {
+            return null;
+        }
+
+        else {
+            Login login = new Login();
+            String email = loginDto.getEmail();
+            String newPass = pass(loginDto.getPassword());
+            String fetchPass = loginService.findPass(email);
+            if(newPass.equals(fetchPass))
+                return new ResponseEntity<String>(HttpStatus.OK);
+            return null;
+
+
+        }
+    }
 }

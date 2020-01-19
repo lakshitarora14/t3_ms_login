@@ -9,17 +9,5 @@ public class LoginHistoryServiceImpl {
     @Autowired
     private LoginRepository loginRepository;
 
-    private void pass(){
-        String password = "123456";
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
-        System.out.println(hashedPassword);
-    }
 
-
-    public static void main(String[] args) {
-
-    LoginHistoryServiceImpl l = new LoginHistoryServiceImpl();
-    l.pass();
-    }
 }

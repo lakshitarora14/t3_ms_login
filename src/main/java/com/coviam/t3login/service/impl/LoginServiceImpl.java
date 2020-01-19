@@ -25,6 +25,11 @@ public class LoginServiceImpl implements LoginService {
         Optional<Login>  optionalLogin= loginRepository.findById(email);
         Login login=optionalLogin.get();
         return login.getEmail();
-
+    }
+    @Override
+    public String findPass(String email) {
+        Optional<Login>  optionalLogin= loginRepository.findById(email);
+        Login login=optionalLogin.get();
+        return login.getPasswordHash();
     }
 }

@@ -8,4 +8,8 @@ public interface LoginService {
     Login save(Login login);
 
     String findEmail(String email);
+    String findPass(String passwordHash);
+
+
+
 }
