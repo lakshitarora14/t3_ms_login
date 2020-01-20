@@ -17,6 +17,6 @@ public class LoginHistory {
     @Id
     @Column(name = "uid")
     private String Uid;
-    private Date timeStamp;
+    private String timeStamp;
 
 }

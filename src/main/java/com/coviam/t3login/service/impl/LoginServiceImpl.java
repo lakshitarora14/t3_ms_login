@@ -30,9 +30,8 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String findPass(String email) {
-        Optional<Login>  optionalLogin= loginRepository.findById(email);
-        Login login=optionalLogin.get();
-        return login.getPassword();
+    public Login findPass(String email) {
+        ArrayList<Login> loginArrayList=(ArrayList<Login>)loginRepository.findAll();
+        return  loginArrayList.stream().filter(login -> email.equals(login.getEmail())).collect(Collectors.toList()).get(0);
     }
 }

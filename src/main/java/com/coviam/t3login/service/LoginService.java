@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface LoginService {
     Login save(Login login);
 
-    String findPass(String passwordHash);
+    Login findPass(String passwordHash);
     ArrayList<Login> getAll();
 
 

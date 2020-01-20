@@ -7,9 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
-/**
- * Created by rohanmarwaha on 20/01/20
- */
+
 @Configuration
 public class SessionConfig {
 

@@ -3,6 +3,8 @@ package com.coviam.t3login.controller;
 import com.coviam.t3login.dto.LoginDto;
 import com.coviam.t3login.dto.SignupDto1;
 import com.coviam.t3login.entity.Login;
+import com.coviam.t3login.entity.LoginHistory;
+import com.coviam.t3login.service.LoginHistoryService;
 import com.coviam.t3login.service.LoginService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +26,8 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private LoginHistoryService loginHistoryService;
     private static String pass(String password){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
@@ -49,23 +56,32 @@ public class LoginController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-
-        /*if (loginService.findEmail(loginDto.getEmail()) == null) {
-            return null;
-        }*/
-
+    /*if (loginService.findEmail(loginDto.getEmail()) == null) {
+        return null;
+    }*/
         //else {
-            Login login = new Login();
-            String email = loginDto.getEmail();
-            String newPass = pass(loginDto.getPassword());
-            String fetchPass = loginService.findPass(email);
-            System.out.println(newPass);
-            System.out.println(fetchPass);
-            if(newPass.equals(fetchPass))
-                return new ResponseEntity<String>(HttpStatus.OK);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Login login = new Login();
+        String email = loginDto.getEmail();
+
+        String newPass = loginDto.getPassword();
+
+        Login loginServicePass = loginService.findPass(email);
+        System.out.println(newPass);
+        System.out.println(loginServicePass.getPassword());
+        if(passwordEncoder.matches(newPass,loginServicePass.getPassword())){
+//        if(newPass.equals(loginServicePass.getPassword())) {
+            LoginHistory loginHistory=new LoginHistory();
+            loginHistory.setUid(loginServicePass.getUid());
+            DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+            Date dateobj = new Date();
+            //System.out.println(df.format(dateobj));
+            loginHistory.setTimeStamp(df.format(dateobj));
+            loginHistoryService.save(loginHistory);
+            return new ResponseEntity<String>("Success", HttpStatus.OK);
+        }
+        else
             return null;
-
-
         //}
     }
 
