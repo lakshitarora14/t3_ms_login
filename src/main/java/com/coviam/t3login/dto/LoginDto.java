@@ -10,8 +10,8 @@ public class LoginDto {
 //    private String uId;
     private String  email;
     private String password;
-    private String cartId;
-    private boolean customerOrMerchant;
+    private String Uid;
+    private boolean Cust_or_Merc;
 
 
 

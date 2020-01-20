@@ -19,13 +19,11 @@ public class Login implements Serializable {
     )
     @Id
     @Column(name = "uid")
-    private String uId;
+    private String Uid;
     private String email;
-    private boolean customerOrMerchant;
-    private String name;
-    private String phone;
+    private boolean Cust_or_Merc;
     private String password;
-    private String pincode;
+
 //    private String cartId;
 
 

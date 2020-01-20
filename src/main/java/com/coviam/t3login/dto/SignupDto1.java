@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 public class SignupDto1 {
 
 
@@ -15,6 +16,7 @@ public class SignupDto1 {
     private String phone_number;
     private String password;
     private String pincode;
+    private boolean Cust_or_Merc;
 //    private String cartId;
 
 }
