@@ -34,7 +34,7 @@ public class LoginController {
         List<Login> list=loginService.getAll();
 
         if (list.size()!=0) {
-            String uid=list.stream().filter(login1 -> login1.getEmail()==signupDto1.getEmail()).map(login1 -> login1.getUId()).collect(Collectors.toList()).get(0);
+            String uid=list.stream().filter(login1 -> login1.getEmail().equals(signupDto1.getEmail())).collect(Collectors.toList()).get(0).getUId();
             return new ResponseEntity<String>(uid, HttpStatus.OK);
         }
 
