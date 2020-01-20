@@ -4,6 +4,7 @@ import com.coviam.t3login.entity.Login;
 import com.coviam.t3login.repository.LoginRepository;
 import com.coviam.t3login.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class LoginServiceImpl implements LoginService {
     private LoginRepository loginRepository;
 
     @Override
+    @Cacheable(value = "userSubscription", key = "#login.email")
     public Login save(Login login){
         return loginRepository.save(login);
 

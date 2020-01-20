@@ -47,7 +47,7 @@ public class LoginController {
         }
     }
 
-    @PostMapping(value = "/loginabc")
+    @PostMapping(value = "/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
 
         /*if (loginService.findEmail(loginDto.getEmail()) == null) {
