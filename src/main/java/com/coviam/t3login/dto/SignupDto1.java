@@ -5,13 +5,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SignupDto {
+public class SignupDto1 {
 
 
 //    private String uId;
+    private String name;
     private String email;
+    private String address;
+    private String phone_number;
     private String password;
-    private boolean customerOrMerchant;
-    private String cartId;
+    private String pincode;
+//    private String cartId;
 
 }

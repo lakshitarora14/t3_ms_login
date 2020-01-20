@@ -20,8 +20,15 @@ public class Login {
     @Column(name = "uid")
     private String uId;
     private String email;
-    private String passwordHash;
     private boolean customerOrMerchant;
-    private String cartId;
+    private String name;
+    private String phone;
+    private String password;
+    private String pincode;
+//    private String cartId;
+
+
+
+
 
 }
