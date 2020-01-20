@@ -29,21 +29,23 @@ public class LoginController {
 
 
     @PostMapping(value = "/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupDto1 signupDto1) {
+    public String signup(@RequestBody SignupDto1 signupDto1) {
         Login login=new Login();
         List<Login> list=loginService.getAll();
-
+        list = list.stream().filter(login1 -> login1.getEmail().equals(signupDto1.getEmail())).collect(Collectors.toList());
         if (list.size()!=0) {
-            String uid=list.stream().filter(login1 -> login1.getEmail().equals(signupDto1.getEmail())).collect(Collectors.toList()).get(0).getUId();
-            return new ResponseEntity<String>(uid, HttpStatus.OK);
+            //String uid=list.stream().collect(Collectors.toList()).get(0).getUid();
+            return null;   //false
         }
 
         else {
             signupDto1.setPassword(pass(signupDto1.getPassword()));
             BeanUtils.copyProperties(signupDto1, login);
+            login.setCust_or_Merc(signupDto1.isCust_or_Merc());
+            System.out.println("-------------------"+signupDto1.isCust_or_Merc());
             Login userCreated = loginService.save(login);
 
-            return new ResponseEntity<String>(userCreated.getUId(), HttpStatus.CREATED);
+            return userCreated.getUid();
         }
     }
 

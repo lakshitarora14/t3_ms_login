@@ -18,13 +18,10 @@ public class Login {
     )
     @Id
     @Column(name = "uid")
-    private String uId;
-    private String email;
-    private boolean customerOrMerchant;
-    private String name;
-    private String phone;
+    private String Uid;
+    private String  email;
     private String password;
-    private String pincode;
+    private boolean Cust_or_Merc;
 //    private String cartId;
 
 
