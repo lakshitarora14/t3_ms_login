@@ -38,6 +38,8 @@ public class LoginServiceImpl implements LoginService {
         return passwordEncoder.encode(password);
     }
 
+    @Override
+    @Cacheable
     public String signup(@RequestBody SignupDto1 signupDto1) {
         Login login=new Login();
         List<Login> list=(ArrayList<Login>)loginRepository.findAll();
@@ -61,6 +63,8 @@ public class LoginServiceImpl implements LoginService {
 //        Boolean aBoolean = template.hasKey(email);
     }
 
+    @Override
+    @Cacheable
     public String login(@RequestBody LoginDto loginDto) {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
