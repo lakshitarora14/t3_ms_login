@@ -13,10 +13,10 @@ public class SignupDto1 {
     private String name;
     private String email;
     private String address;
-    private String phone_number;
+    private String phoneNumber;
     private String password;
     private String pincode;
-    private boolean Cust_or_Merc;
+    private String loginType;
 //    private String cartId;
 
 }

@@ -21,7 +21,7 @@ public class Login implements Serializable {
     @Column(name = "uid")
     private String Uid;
     private String email;
-    private boolean Cust_or_Merc;
+    private String loginType;
     private String password;
 
 //    private String cartId;

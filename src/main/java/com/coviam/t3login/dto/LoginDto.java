@@ -13,7 +13,7 @@ public class LoginDto {
     private String  email;
     private String password;
     private String Uid;
-    private boolean Cust_or_Merc;
+    private String loginType;
 
 
 
