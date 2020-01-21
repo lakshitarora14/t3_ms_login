@@ -19,6 +19,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     @Cacheable(value = "userSubscription", key = "#login.email")
+//    @Cacheable(value = "userSubscription", key = "#login.uid")
     public Login save(Login login){
         return loginRepository.save(login);
 
@@ -31,6 +32,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Login findPass(String email) {
+
+        System.out.println("----------"+email);
         ArrayList<Login> loginArrayList=(ArrayList<Login>)loginRepository.findAll();
         return  loginArrayList.stream().filter(login -> email.equals(login.getEmail())).collect(Collectors.toList()).get(0);
     }

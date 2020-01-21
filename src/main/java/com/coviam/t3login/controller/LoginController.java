@@ -8,10 +8,19 @@ import com.coviam.t3login.service.LoginHistoryService;
 import com.coviam.t3login.service.LoginService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.data.redis.core.RedisTemplate;
+
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -19,9 +28,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.sun.tools.doclint.Entity.exist;
+
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/login")
 public class LoginController {
+
+    @Autowired
+    RedisTemplate<SignupDto1, String> template;
 
     @Autowired
     private LoginService loginService;
@@ -33,7 +48,15 @@ public class LoginController {
         return passwordEncoder.encode(password);
     }
 
-
+//    public void islogin(){
+//
+//        if (template.hasKey(lakshitarora@gmail.com)) {
+//            System.out.println(“exist”);
+//        } else {
+//            System.out.println(“doesnt ex”);
+//        }
+//
+//    }
 
     @PostMapping(value = "/signup")
     public String signup(@RequestBody SignupDto1 signupDto1) {
@@ -53,36 +76,55 @@ public class LoginController {
             return userCreated.getUid();
         }
     }
+//    @PostMapping(value = "/signout")
+//    @Cacheable("deleteCustomer")
+//    public void deleteCustomer() {
+//
+//        String id =  "lakshitarora@gmail.com";
+//        template.execute(new RedisCallback<String>() {
+//            @Override
+//            public String doInRedis(RedisConnection redisConnection) throws DataAccessException {
+//                redisConnection.del(template.getStringSerializer().serialize(String.valueOf(id)));
+//                return null;
+//            }
+//        });
+//    }
+//    @PostMapping(value = "/signout")
+//    @CacheEvict(value = "userSubscription",key = "#login.email")
+//    public void evictAllCacheValues() {}
 
     @PostMapping(value = "/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-    /*if (loginService.findEmail(loginDto.getEmail()) == null) {
-        return null;
-    }*/
-        //else {
+    public String login(@RequestBody LoginDto loginDto) {
+
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Login login = new Login();
         String email = loginDto.getEmail();
 
         String newPass = loginDto.getPassword();
+        System.out.println(loginDto);
+        List<Login> list=loginService.getAll();
+        list = list.stream().filter(login1 -> login1.getEmail().equals(loginDto.getEmail())).collect(Collectors.toList());
+        if (list.size()!=0) {
+            //String uid=list.stream().collect(Collectors.toList()).get(0).getUid();
+            Login loginServicePass = loginService.findPass(email);
+//        System.out.println(newPass);
+//        System.out.println(loginServicePass.getPassword());
+            if(passwordEncoder.matches(newPass,loginServicePass.getPassword())){
+                LoginHistory loginHistory=new LoginHistory();
+                loginHistory.setUid(loginServicePass.getUid());
+                DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                Date dateobj = new Date();
+                loginHistory.setTimeStamp(df.format(dateobj));
+                loginHistoryService.save(loginHistory);
+                return "Success";
+            }
+            return "Wrong Password";
 
-        Login loginServicePass = loginService.findPass(email);
-        System.out.println(newPass);
-        System.out.println(loginServicePass.getPassword());
-        if(passwordEncoder.matches(newPass,loginServicePass.getPassword())){
-//        if(newPass.equals(loginServicePass.getPassword())) {
-            LoginHistory loginHistory=new LoginHistory();
-            loginHistory.setUid(loginServicePass.getUid());
-            DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-            Date dateobj = new Date();
-            //System.out.println(df.format(dateobj));
-            loginHistory.setTimeStamp(df.format(dateobj));
-            loginHistoryService.save(loginHistory);
-            return new ResponseEntity<String>("Success", HttpStatus.OK);
         }
-        else
-            return null;
-        //}
+        else {
+           return "User Not Registered";
+        }
+
     }
 
 
