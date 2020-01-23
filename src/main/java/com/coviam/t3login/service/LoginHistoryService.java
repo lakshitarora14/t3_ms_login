@@ -8,3 +8,4 @@ public interface LoginHistoryService {
 
     void save(LoginHistory loginHistory);
 }
+
