@@ -38,8 +38,9 @@ public class LoginServiceImpl implements LoginService {
         return passwordEncoder.encode(password);
     }
 
+
+    //@Cacheable
     @Override
-    @Cacheable
     public String signup(@RequestBody SignupDto1 signupDto1) {
         Login login=new Login();
         List<Login> list=(ArrayList<Login>)loginRepository.findAll();
@@ -58,13 +59,10 @@ public class LoginServiceImpl implements LoginService {
         }
     }
     @CacheEvict(value = "user",key = "#email")
-    public void evictAllCacheValues(@RequestParam("email") String email) {
-//        loginRepository.evictCacheForKey(email);
-//        Boolean aBoolean = template.hasKey(email);
+    public void evictCacheForKey(@RequestParam("email") String email) {
     }
 
     @Override
-    @Cacheable
     public String login(@RequestBody LoginDto loginDto) {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -84,13 +82,13 @@ public class LoginServiceImpl implements LoginService {
                 Date dateobj = new Date();
                 loginHistory.setTimeStamp(df.format(dateobj));
                 loginHistoryService.save(loginHistory);
-                return "{\"response\":\""+list.get(0).getUid()+"\"}";
+                return list.get(0).getUid();
             }
-            return "{\"response\":\"Wrong Password\"}";
+            return "Wrong Password";
 
         }
         else {
-            return "{\"response\":\"Not registered\"}";
+            return "Not registered";
         }
 
     }
@@ -113,10 +111,10 @@ public class LoginServiceImpl implements LoginService {
         return (ArrayList<Login>) loginRepository.findAll();
     }
 
-    @Override
-    @CacheEvict(value = "userSubscription",key = "#email")
-    public void evictCacheForKey(String email) {
-    }
+//    @Override
+//    @CacheEvict(value = "userSubscription",key = "#email")
+//    public void evictCacheForKey(String email) {
+//    }
 
     @Override
     public Login findPass(String email) {

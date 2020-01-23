@@ -14,8 +14,8 @@ import javax.persistence.Cacheable;
 @Service
 public class LoginHistoryServiceImpl implements LoginHistoryService {
 
-    @Autowired
-    private LoginRepository loginRepository;
+//    @Autowired
+//    private LoginRepository loginRepository;
 
     @Autowired
     private LoginHistoryRepository loginHistoryRepository;

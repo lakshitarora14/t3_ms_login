@@ -17,6 +17,10 @@ public class SignupDto1 {
     private String password;
     private String pincode;
     private String loginType;
+
+
+
+
 //    private String cartId;
 
 }
