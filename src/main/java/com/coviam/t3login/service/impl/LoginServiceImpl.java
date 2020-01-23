@@ -39,29 +39,28 @@ public class LoginServiceImpl implements LoginService {
     }
 
 
-    //@Cacheable
+//    @Cacheable
     @Override
-    public String signup(@RequestBody SignupDto1 signupDto1) {
+    public Login signup(@RequestBody SignupDto1 signupDto1) {
         Login login=new Login();
-        List<Login> list=(ArrayList<Login>)loginRepository.findAll();
-        list = list.stream().filter(login1 -> login1.getEmail().equals(signupDto1.getEmail())).collect(Collectors.toList());
-        if (list.size()!=0) {
-            //String uid=list.stream().collect(Collectors.toList()).get(0).getUid();
-            return null;   //false
-        }
-        else {
-            signupDto1.setPassword(pass(signupDto1.getPassword()));
-            BeanUtils.copyProperties(signupDto1, login);
-            login.setLoginType(signupDto1.getLoginType());
+//        List<Login> list=(ArrayList<Login>)loginRepository.findAll();
+//        list = list.stream().filter(login1 -> login1.getEmail().equals(signupDto1.getEmail())).collect(Collectors.toList());
+//        if (list.size()!=0) {
+//            String uid=list.stream().collect(Collectors.toList()).get(0).getUid();
+//            return null;   //false
+//        }
+//        else {
+        BeanUtils.copyProperties(signupDto1, login);
+        login.setPassword(pass(signupDto1.getPassword()));
             System.out.println("-------------------"+signupDto1.getLoginType());
-            Login userCreated = loginRepository.save(login);
-            return userCreated.getUid();
-        }
+            return loginRepository.save(login);
+//        }
     }
     @CacheEvict(value = "user",key = "#email")
     public void evictCacheForKey(@RequestParam("email") String email) {
     }
 
+    @Cacheable(value = "user", key = "#loginDto.email")
     @Override
     public String login(@RequestBody LoginDto loginDto) {
 

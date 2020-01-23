@@ -39,7 +39,11 @@ public class LoginController {
 
     @PostMapping(value = "/signup")
     public String signup(@RequestBody SignupDto1 signupDto1) {
-        return loginService.signup(signupDto1);
+        LoginDto loginDto = LoginDto.builder().email(signupDto1.getEmail())
+        .password(signupDto1.getPassword()).loginType(signupDto1.getLoginType()).build();
+        Login signup = loginService.signup(signupDto1);
+        loginDto.setUid(signup.getUid());
+        return loginService.login(loginDto);
     }
     @PostMapping(value = "/signout")
     public void evictAllCacheValues(@RequestParam("email") String email) {
